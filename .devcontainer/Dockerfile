@@ -35,6 +35,11 @@ RUN sudo apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && pip --no-cache-dir install radian \
     && pip --disable-pip-version-check --no-cache-dir install pandas \
     && pip --disable-pip-version-check --no-cache-dir install seaborn \
+    && pip --disable-pip-version-check --no-cache-dir install Pillow \
+    && pip --disable-pip-version-check --no-cache-dir install numpy \
+    && pip --disable-pip-version-check --no-cache-dir install matplotlib \
+    && pip --disable-pip-version-check --no-cache-dir install scikit-image \
+    && pip --disable-pip-version-check --no-cache-dir install scipy \
     # Install R packages
     && install2.r --error --skipinstalled --ncpus -1 \
         palmerpenguins \
