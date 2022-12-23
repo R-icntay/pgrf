@@ -11,7 +11,7 @@ def surface_dividing(triangulated_surface, sagittal_plane):
     vertices = [(0, 0, 0), (1, 1, 0), (2, 0, 0), (0, 1, 0), (2, 1, 0)]
     triangles = [(0, 3, 4), (0, 1, 2)]
     sagittal_plane = 1.5
-    triangulated_surface = [[(0, 0, 0), (1, 1, 0), (2, 0, 0), (0, 1, 0), (2, 1, 0)], [(0, 3, 4), (0, 1, 2)]]
+    triangulated_surface = [vertices, triangles]
 
     # Call function
     triangulated_surfaces_left, triangulated_surfaces_right = surface_dividing(triangulated_surface, sagittal_plane) 
@@ -29,9 +29,9 @@ def surface_dividing(triangulated_surface, sagittal_plane):
     # sagittal plane is oriented along the x-axis hence x component of vertices is used for comparison
     for vertex in vertices:
         if vertex[0] < sagittal_plane:
-            left_surface_vertices.append(vertex)
+            left_surface_vertices.append(tuple(vertex))
         else:
-            right_surface_vertices.append(vertex)
+            right_surface_vertices.append(tuple(vertex))
     
     # Determine the position of triangles by checking which side of the sagittal plane each vertex lies
     for triangle in triangles:
@@ -52,13 +52,13 @@ def surface_dividing(triangulated_surface, sagittal_plane):
             # Index of the vertices that make up the triangle
             left_indices = []
             for i in range(len(triangle_vertices)):
-                left_indices.append(left_surface_vertices.index(triangle_vertices[i]))
+                left_indices.append(left_surface_vertices.index(tuple(triangle_vertices[i])))
             left_surface_triangles.append(tuple(left_indices))
 
         elif right_of_sagittal == 3:
             right_indices = []
             for i in range(len(triangle_vertices)):
-                right_indices.append(right_surface_vertices.index(triangle_vertices[i]))
+                right_indices.append(right_surface_vertices.index(tuple(triangle_vertices[i])))
             right_surface_triangles.append(tuple(right_indices))
 
         else:
@@ -71,8 +71,8 @@ def surface_dividing(triangulated_surface, sagittal_plane):
 
         # Determine the point of intersection between a triangles edges and the sagittal plane
             for i in range(len(triangle_vertices)):
-                v1 = triangle_vertices[i]
-                v2 = triangle_vertices[(i+1) % 3]
+                v1 = tuple(triangle_vertices[i])
+                v2 = tuple(triangle_vertices[(i+1) % 3])
             # Check whether the saggital plane intersects with a triangle's edge
                 if v1[0] < sagittal_plane < v2[0] or v2[0] < sagittal_plane < v1[0]:
                     edge_ip = (sagittal_plane - v1[0]) / (v2[0] - v1[0])
@@ -92,9 +92,9 @@ def surface_dividing(triangulated_surface, sagittal_plane):
         # For each vertex of the triangle , determine its index either in the left or in the right lists of vertices
             for vertex in triangle_vertices:
                 if vertex[0] < sagittal_plane:
-                    left_indices.append(left_surface_vertices.index(vertex))
+                    left_indices.append(left_surface_vertices.index(tuple(vertex)))
                 else:
-                    right_indices.append(right_surface_vertices.index(vertex))
+                    right_indices.append(right_surface_vertices.index(tuple(vertex)))
 
         # Create new triangles by combining initial vertices with newly formed intersection points
             if right_of_sagittal == 1:
@@ -118,5 +118,3 @@ def surface_dividing(triangulated_surface, sagittal_plane):
 
     # Return two lists of left triangulated surfaces and right triangulated surfaces wrt to sagittal plane
     return [left_surface_vertices, left_surface_triangles], [right_surface_vertices, right_surface_triangles]
-
-    
