@@ -58,7 +58,7 @@ warped_volume_2 = rigid_transform_t2.warp(warped_volume_1)
 warped_volume_3 = rigid_transform_t3.warp(warped_volume_2)
 
 # Experiment 1.3.3: Compare the two warped images
-print('The difference between the two warped images is: ', np.sum(np.abs(warped_volume_t3t2t1 - warped_volume_3)))
+print('The mean difference between the two warped images is: ', np.mean(np.abs(warped_volume_t3t2t1 - warped_volume_3)))
 
 # Save slices from the two images
 # For each warped image, save 5 slices from each image
