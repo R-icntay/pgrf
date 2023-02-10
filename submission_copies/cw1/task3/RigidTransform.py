@@ -96,7 +96,8 @@ class RigidTransform:
     def warp(self, volume):
         """
         This function takes an image volume and returns the warped volume.
-        To warp the image, the coordinates are rotated and translated, then the value at the new coordinates is interpolated.
+        To warp the image, the warped image coordinates are computed by adding the displacement vector field to the original image coordinates.
+        The warped image volume is then computed by interpolating the original image volume at the warped image coordinates.
 
         volume: 3D numpy array of shape (image_size_x, image_size_y, image_size_z)
 
@@ -104,15 +105,15 @@ class RigidTransform:
 
         """
         # Pre-allocate warped volume ddf
-        warped_image_coords = []
-        for x in range(volume.shape[0]):
-            for y in range(volume.shape[1]):
-                for z in range(volume.shape[2]):
-                    # Compute new voxel coordinates in the warped image
-                    # by applying the rotation matrix and then the translation vector
-                    warped_image_coords.append(np.matmul(self.rot_vec, np.array([x, y, z])) + self.trans_vec)
-        warped_image_coords = np.array(warped_image_coords)
-        self.warped_image_coords = warped_image_coords
+        # warped_image_coords = []
+        # for x in range(volume.shape[0]):
+        #     for y in range(volume.shape[1]):
+        #         for z in range(volume.shape[2]):
+        #             # Compute new voxel coordinates in the warped image
+        #             # by applying the rotation matrix and then the translation vector
+        #             warped_image_coords.append(np.matmul(self.rot_vec, np.array([x, y, z])) + self.trans_vec)
+        # warped_image_coords = np.array(warped_image_coords)
+        
 
         # # Interpolate the image volume at the new coordinates to get the warped image volume
         # warped_volume = interpn((np.arange(volume.shape[0]), np.arange(volume.shape[1]), np.arange(volume.shape[2])),
@@ -132,6 +133,11 @@ class RigidTransform:
         # Create a grid of coordinates of the original volume of shape (n, Dim)
         X, Y, Z = np.meshgrid(np.arange(volume.shape[0]), np.arange(volume.shape[1]), np.arange(volume.shape[2]), indexing='ij')
         grid_coords = np.stack((X.ravel(), Y.ravel(), Z.ravel()), axis=1)
+
+        # Compute new voxel coordinates in the warped image: which is the same as adding
+        # the dense displacement field to the original image coordinates ie grid_coords + ddf
+        warped_image_coords = grid_coords + self.ddf.reshape(grid_coords.shape)
+        self.warped_image_coords = warped_image_coords
 
         # Interpolate the image volume at the new coordinates to get the warped image volume
         # volume is flattened to a 1D array of shape (n,)
