@@ -20,13 +20,14 @@ class RigidTransform:
 
 
     # Initialize class with rotations and translations
-    def __init__(self, rotations, translations, image_size):
+    def __init__(self, rotations, translations, image_size, flag_composing_ddf = False):
         self.rx = rotations[0]
         self.ry = rotations[1]
         self.rz = rotations[2]
         self.tx = translations[0]
         self.ty = translations[1]
         self.tz = translations[2]
+        self.flag_composing_ddf = flag_composing_ddf
        
 
         # Precompute a rotation matrix and a translation vector stored in the class object
@@ -113,10 +114,10 @@ class RigidTransform:
         warped_image_coords = np.array(warped_image_coords)
         self.warped_image_coords = warped_image_coords
 
-        # Interpolate the image volume at the new coordinates to get the warped image volume
-        warped_volume = interpn((np.arange(volume.shape[0]), np.arange(volume.shape[1]), np.arange(volume.shape[2])),
-                                volume, warped_image_coords, method='nearest',
-                                bounds_error=False, fill_value=None)
+        # # Interpolate the image volume at the new coordinates to get the warped image volume
+        # warped_volume = interpn((np.arange(volume.shape[0]), np.arange(volume.shape[1]), np.arange(volume.shape[2])),
+        #                         volume, warped_image_coords, method='nearest',
+        #                         bounds_error=False, fill_value=None)
 
         
 
@@ -124,16 +125,18 @@ class RigidTransform:
         # Implement interpolation using map_coordinates
         #warped_volume = map_coordinates(volume, [warped_image_coords.T[0], warped_image_coords.T[1], warped_image_coords.T[2]], order=3, mode='nearest', cval=np.NaN, prefilter=False)
         
-        # Interpolate using griddata
-        # Create a grid of coordinates of the original volume
-        # X, Y, Z = np.meshgrid(np.arange(volume.shape[0]), np.arange(volume.shape[1]), np.arange(volume.shape[2]), indexing='ij')
-        # grid_coords = np.stack((X.ravel(), Y.ravel(), Z.ravel()), axis=1)
+        ##---- Interpolate using scipy.interpolate.griddata ---------
+        ## Prepare inputs according to the documentation:
+        ## https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.griddata.html
 
-        # # Interpolate the image volume at the new coordinates to get the warped image volume
-        # warped_volume = griddata(grid_coords, volume.ravel(), warped_image_coords, method='nearest')
+        # Create a grid of coordinates of the original volume of shape (n, Dim)
+        X, Y, Z = np.meshgrid(np.arange(volume.shape[0]), np.arange(volume.shape[1]), np.arange(volume.shape[2]), indexing='ij')
+        grid_coords = np.stack((X.ravel(), Y.ravel(), Z.ravel()), axis=1)
 
-        # # Reshape the warped image volume to the correct shape
-        # warped_volume = warped_volume.reshape(volume.shape)
+        # Interpolate the image volume at the new coordinates to get the warped image volume
+        # volume is flattened to a 1D array of shape (n,)
+        # warped image coordinates are already in the correct shape (n, Dim)
+        warped_volume = griddata(grid_coords, volume.ravel(), warped_image_coords, method='nearest')
 
         # Reshape the warped image volume to the correct shape
         warped_volume = warped_volume.reshape(volume.shape)
@@ -161,22 +164,38 @@ class RigidTransform:
 
         """
 
-
-
-
         # Create a RigidTransform object from second set of rotations and translations
-        composed_transform = RigidTransform(rotations2, translations2,  warped_image_size = image_size)
+        composed_transform = RigidTransform(rotations2, translations2, image_size = image_size, flag_composing_ddf = self.flag_composing_ddf)
 
         # Update rotation matrix in the correct order: R2*R1
         composed_transform.rot_vec = np.matmul(composed_transform.rot_vec, self.rot_vec)
 
         # Update translation vector: R2*t1 + t2
         composed_transform.trans_vec = np.matmul(composed_transform.rot_vec, self.trans_vec) + np.array(translations2)
-
-        # Update the DDF:
-        composed_transform.compute_ddf(image_size)
-
         
+        if self.flag_composing_ddf == True: 
+            # Update DDF using a different algorithm: compose_ddfs
+            composed_transform.ddf = self.composing_ddfs(self.ddf, composed_transform.ddf)
+        else:
+            # Update the DDF using compute_ddf:
+            composed_transform.compute_ddf(image_size)
+
+        return composed_transform
+        
+    # A different algorithm for computing the DDF
+    def composing_ddfs(self, ddf1, ddf2):
+        """
+        This function takes two DDFs and returns a new DDF which is the composition of the two transformations.
+        This function assumes that the DDFs are defined in the same spatial grid.
+
+        ddf1: dense displacement field from the first transformation
+        ddf2: dense displacement field from the second transformation
+
+        """
+        composed_ddf = ddf1 + ddf2
+
+        return composed_ddf
+
 
    
 
