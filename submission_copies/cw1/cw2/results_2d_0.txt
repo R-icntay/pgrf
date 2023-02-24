@@ -1,0 +1,12 @@
+
+Results for 2D filtering after reslicing for slice 0, experiment 1: 
+
+MSE: 1284.0939281930075 
+SSIM: 0.23435265437038447 
+PSNR: 17.04483568440412 
+
+Results for 2D filtering after reslicing for slice 0, experiment 2: 
+
+MSE: 1281.2091325940141 
+SSIM: 0.23586306177091884 
+PSNR: 17.05460335168157 

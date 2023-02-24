@@ -102,8 +102,7 @@ plt.title('SSD:  8-bit CT and  8-bit CT')
 # 3) THE ORIGINAL 16 BIT CT IMAGE AND THE TRANSFORMED MR IMAGE
 # 4) THE ORIGINAL 8 BIT CT IMAGE AND THE TRANSFORMED 8 BIT CT IMAGE
 # ***************
-from utils2 import calcMSD
-MSDs = np.zeros((theta.size, 4))
+
 for n in range(theta.size):
   
   # CREATE AFFINE MATRIX AND CORRESPONDING DEFORMATION FIELD

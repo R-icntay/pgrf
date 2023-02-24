@@ -93,7 +93,7 @@ def defFieldFromAffineMatrix(aff_mat, num_pix_x, num_pix_y):
   def_field[:,:,1] = np.reshape(trans_coords[1,:], (num_pix_x, num_pix_y))
   return def_field
 
-def resampImageWithDefField(source_img, def_field, interp_method = 'linear', pad_value=np.NaN):
+def resampImageWithDefField(source_img, def_field, interp_method = 'splinef2d', pad_value=np.NaN):
   """
  function to resample a 2D image with a 2D deformation field
 
