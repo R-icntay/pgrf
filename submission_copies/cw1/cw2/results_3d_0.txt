@@ -8,3 +8,33 @@ Results for 3D filtering before reslicing for slice 0, experiment 2:
 MSE: 1275.4698292476753 
 SSIM: 0.22657852835844602 
 PSNR: 17.074101708709225 
+
+Results for 3D filtering before reslicing for slice 0, experiment 1: 
+MSE: 1276.3708605240913 
+SSIM: 0.2267836085467955 
+PSNR: 17.071034801521797 
+
+Results for 3D filtering before reslicing for slice 0, experiment 2: 
+MSE: 1275.4698292476753 
+SSIM: 0.22657852835844602 
+PSNR: 17.074101708709225 
+
+Results for 3D filtering before reslicing for slice 0, experiment 3: 
+MSE: 1276.3708605240913 
+SSIM: 0.2267836085467955 
+PSNR: 17.071034801521797 
+
+Results for 3D filtering before reslicing for slice 0, experiment 4: 
+MSE: 1275.9740185967878 
+SSIM: 0.22684943512834405 
+PSNR: 17.07238529503868 
+
+Results for 3D filtering before reslicing for slice 0, experiment 5: 
+MSE: 1276.3708605240913 
+SSIM: 0.2267836085467955 
+PSNR: 17.071034801521797 
+
+Results for 3D filtering before reslicing for slice 0, experiment 6: 
+MSE: 1152.2170076077768 
+SSIM: 0.25954453903327773 
+PSNR: 17.515460794100587 

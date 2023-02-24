@@ -10,3 +10,39 @@ Results for 2D filtering after reslicing for slice 0, experiment 2:
 MSE: 1281.2091325940141 
 SSIM: 0.23586306177091884 
 PSNR: 17.05460335168157 
+
+Results for 2D filtering after reslicing for slice 0, experiment 1: 
+
+MSE: 1284.0939281930075 
+SSIM: 0.23435265437038447 
+PSNR: 17.04483568440412 
+
+Results for 2D filtering after reslicing for slice 0, experiment 2: 
+
+MSE: 1281.2091325940141 
+SSIM: 0.23586306177091884 
+PSNR: 17.05460335168157 
+
+Results for 2D filtering after reslicing for slice 0, experiment 3: 
+
+MSE: 1284.0939281930075 
+SSIM: 0.23435265437038447 
+PSNR: 17.04483568440412 
+
+Results for 2D filtering after reslicing for slice 0, experiment 4: 
+
+MSE: 1283.4920609129483 
+SSIM: 0.2346936867050364 
+PSNR: 17.046871741965305 
+
+Results for 2D filtering after reslicing for slice 0, experiment 5: 
+
+MSE: 1284.0939281930075 
+SSIM: 0.23435265437038447 
+PSNR: 17.04483568440412 
+
+Results for 2D filtering after reslicing for slice 0, experiment 6: 
+
+MSE: 1133.2866324494812 
+SSIM: 0.29167069604693957 
+PSNR: 17.587405947400622 
